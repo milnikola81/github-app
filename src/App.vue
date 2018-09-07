@@ -26,6 +26,7 @@
             </div>
           </v-ons-list-item>
         </v-ons-list>
+        <empty-state :type="type" v-if="error"></empty-state>
       </div>
       <br>
 
@@ -35,6 +36,7 @@
 <script>
 import AppToolbar from './components/AppToolbar'
 import AppSearch from './components/AppSearch'
+import EmptyState from './components/EmptyState'
 import { gitHub } from './services/gitHub'
 
 import debounce from 'lodash/debounce'
@@ -42,17 +44,26 @@ import debounce from 'lodash/debounce'
 export default {
   components: {
     AppToolbar,
-    AppSearch
+    AppSearch,
+    EmptyState
   },
   data() {
     return {
       title: 'Github App',
       query: '',
       placeholder: 'Search...',
-      repos: '',
-      showLoader: false
+      repos: [],
+      showLoader: false,
+      type: 'repository',
+      error: ''
     };
   },
+  // computed: {
+  //   computedRepos: function() {
+  //     console.log(this.repos.length)
+  //     return this.repos
+  //   }
+  // },
   methods: {
     alert() {
       this.$ons.notification.alert('This is an Onsen UI alert notification test.');
@@ -65,9 +76,15 @@ export default {
         .then((response) => {
           this.repos = response.data
           this.showLoader = false;
+          this.error = ''
+        })
+        .catch((error) => { 
+          console.log(error)
+          this.error = error
+          this.showLoader = false
         })
     }, 500)
-  }
+  },
 };
 
 </script>
