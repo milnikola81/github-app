@@ -1,9 +1,11 @@
 <template>
-    <v-ons-input
-        @input="$emit('update:query', $event.target.value)"
-        :placeholder="placeholder"
-        :value="query">
-    </v-ons-input>
+    <div style="text-align: center">
+        <v-ons-search-input
+            @input="$emit('update:query', $event.target.value)"
+            :placeholder="placeholder"
+            :value="query">
+        </v-ons-search-input>
+    </div>
 </template>
 
 <script>

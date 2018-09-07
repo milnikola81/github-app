@@ -1,20 +1,28 @@
 <template>
     <v-ons-page>
-      <AppToolbar />
+      <app-toolbar>
+        <template slot="right">
+          <v-ons-button modifier="quiet">
+            <v-ons-icon icon="md-settings"></v-ons-icon>
+          </v-ons-button>
+        </template>
+      </app-toolbar>
+      <br>
       <div class="center">
         <AppSearch :query.sync="query" :placeholder="placeholder"/>
       </div>
+      <br>
       <v-ons-list>
         <v-ons-list-header>
           Repositories of: {{query}}
         </v-ons-list-header>
         <v-ons-list-item v-for="(repo, index) in repos" :key="index">
           <div class="left">
-            <img class="list-item_thumbnail" :src="repo.owner.avatar_url" alt="" height="30">
+            <img class="list-item__thumbnail" :src="repo.owner.avatar_url" alt="">
           </div>
           <div class="center">
-            <span class="list-item_title">{{repo.name}}</span>
-            <span class="list-item_subtitle">{{repo.description}}</span>
+            <span class="list-item__title">{{repo.name}}</span>
+            <span class="list-item__subtitle">{{repo.description}}</span>
           </div>
         </v-ons-list-item>
       </v-ons-list>
@@ -58,3 +66,4 @@ export default {
 };
 
 </script>
+
