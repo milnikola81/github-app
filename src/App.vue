@@ -26,7 +26,9 @@
             </div>
           </v-ons-list-item>
         </v-ons-list>
-        <empty-state :type="type" v-if="error"></empty-state>
+        <empty-state v-if="noRepos" :type="type"></empty-state>
+        <!-- <empty-state :type="type" v-if="error && error.response.status !== 404"></empty-state> -->
+        <no-user v-else-if="query && error && error.response.status === 404"></no-user>
       </div>
       <br>
 
@@ -37,6 +39,8 @@
 import AppToolbar from './components/AppToolbar'
 import AppSearch from './components/AppSearch'
 import EmptyState from './components/EmptyState'
+import NoUser from './components/NoUser'
+
 import { gitHub } from './services/gitHub'
 
 import debounce from 'lodash/debounce'
@@ -45,7 +49,8 @@ export default {
   components: {
     AppToolbar,
     AppSearch,
-    EmptyState
+    EmptyState,
+    NoUser
   },
   data() {
     return {
@@ -55,15 +60,10 @@ export default {
       repos: [],
       showLoader: false,
       type: 'repository',
-      error: ''
+      error: '',
+      noRepos: false
     };
   },
-  // computed: {
-  //   computedRepos: function() {
-  //     console.log(this.repos.length)
-  //     return this.repos
-  //   }
-  // },
   methods: {
     alert() {
       this.$ons.notification.alert('This is an Onsen UI alert notification test.');
@@ -77,11 +77,17 @@ export default {
           this.repos = response.data
           this.showLoader = false;
           this.error = ''
+          if(!this.repos) {
+            this.noRepos = true
+          }
+          console.log(this,noRepos)
+          console.log('done')
         })
         .catch((error) => { 
-          console.log(error)
+          console.log(error.response.status)
           this.error = error
           this.showLoader = false
+          this.repos = []
         })
     }, 500)
   },
